@@ -54,6 +54,7 @@ class CocoDetectionEvaluator:
         json.dump(results_json, open(json_path, 'w'))
         coco_dets = self.coco_api.loadRes(json_path)
         coco_eval = COCOeval(copy.deepcopy(self.coco_api), copy.deepcopy(coco_dets), "bbox")
+        coco_eval.params.catIds = [1] # only evaluate person
         coco_eval.evaluate()
         coco_eval.accumulate()
         coco_eval.summarize()
