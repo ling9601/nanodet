@@ -30,6 +30,27 @@ def normalize(meta, mean, std):
     return meta
 
 
+def random_GasussNoise(img, std):
+    """
+    std: [0, std]
+    """
+    std = random.uniform(0, std)
+    noise = np.random.normal(scale=std, size=img.shape)
+    img += noise
+    img = img.clip(0, 1)
+    return img
+
+
+def random_AverageBlur(img, k):
+    """
+    k: kerner size (2, 2) ~ (k, k)
+    """
+    k = random.randint(2, k)
+    kernel = np.ones((k, k), np.float32) / (k*k)
+    img = cv2.filter2D(img, -1, kernel)
+    return img
+
+
 def _normalize(img, mean, std):
     mean = np.array(mean, dtype=np.float32).reshape(1, 1, 3) / 255
     std = np.array(std, dtype=np.float32).reshape(1, 1, 3) / 255
@@ -48,6 +69,12 @@ def color_aug_and_norm(meta, kwargs):
 
     if 'saturation' in kwargs and random.randint(0, 1):
         img = random_saturation(img, *kwargs['saturation'])
+
+    if 'GasussNoise' in kwargs and random.randint(0, 1):
+        img = random_GasussNoise(img, *kwargs['GasussNoise'])
+    
+    if 'AverageBlur' in kwargs and random.randint(0, 1):
+        img = random_AverageBlur(img, *kwargs['AverageBlur'])
     # cv2.imshow('trans', img)
     # cv2.waitKey(0)
     img = _normalize(img, *kwargs['normalize'])
