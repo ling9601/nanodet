@@ -71,10 +71,10 @@ def color_aug_and_norm(meta, kwargs):
         img = random_saturation(img, *kwargs['saturation'])
 
     if 'GasussNoise' in kwargs and random.randint(0, 1):
-        img = random_GasussNoise(img, *kwargs['GasussNoise'])
+        img = random_GasussNoise(img, kwargs['GasussNoise'])
     
     if 'AverageBlur' in kwargs and random.randint(0, 1):
-        img = random_AverageBlur(img, *kwargs['AverageBlur'])
+        img = random_AverageBlur(img, kwargs['AverageBlur'])
     # cv2.imshow('trans', img)
     # cv2.waitKey(0)
     img = _normalize(img, *kwargs['normalize'])
