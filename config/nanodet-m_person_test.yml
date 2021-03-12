@@ -44,7 +44,7 @@ data:
   train:
     name: coco
     img_path: /home/lingxt/dataset/coco/train2017
-    ann_path: /home/lingxt/dataset/coco/annotations/instances_train2017.json
+    ann_path: /home/lingxt/dataset/coco/annotations/train2017_person.json
     input_size: [320,320] #[w,h]
     keep_ratio: True
     pipeline:
@@ -73,8 +73,8 @@ device:
   workers_per_gpu: 12
   batchsize_per_gpu: 160
 schedule:
-  resume:
-#  load_model: YOUR_MODEL_PATH
+  # resume:
+  # load_model:
   optimizer:
     name: SGD
     lr: 0.14
