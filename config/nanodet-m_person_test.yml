@@ -39,7 +39,6 @@ model:
         loss_bbox:
           name: GIoULoss
           loss_weight: 2.0
-class_names: &class_names ['person']
 data:
   train:
     name: coco
@@ -60,10 +59,9 @@ data:
       saturation: [0.8, 1.2]
       normalize: [[103.53, 116.28, 123.675], [57.375, 57.12, 58.395]]
   val:
-    name: xml_dataset
-    class_names: *class_names
-    img_path: /home/lingxt/dataset/ofuroba/20210216-234549_7200_cut_7.5_(7)/images
-    ann_path: /home/lingxt/dataset/ofuroba/20210216-234549_7200_cut_7.5_(7)/annotations
+    name: coco
+    img_path: /home/lingxt/dataset/ofuroba/images
+    ann_path: /home/lingxt/dataset/ofuroba/annotations/yumoto_2.json
     input_size: [320,320] #[w,h]
     keep_ratio: True
     pipeline:
@@ -96,3 +94,5 @@ evaluator:
 
 log:
   interval: 10
+
+class_names: ['person']
