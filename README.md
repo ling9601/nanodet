@@ -298,6 +298,21 @@ NanoDet provide C++ and Android demo based on ncnn library.
 
     Please refer to [android_demo](demo_android_ncnn/README.md).
 
+# Docker
+Build
+```shell
+sudo docker build . -t nanodet
+```
+Run
+```shell
+docker run --gpus all --rm -ti --ipc=host -v /home/lingxt/github/nanodet:/code -v /home/lingxt/dataset:/code/dataset -p 6006:6006 nanodet:latest
+```
+Tensorboard
+```shell
+cd <YOUR_SAVE_DIR>
+tensorboard --logdir ./ --host=0.0.0.0
+```
+
 ****
 
 ## Thanks
