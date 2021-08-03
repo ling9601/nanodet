@@ -49,7 +49,7 @@ Download Vulkan SDK from https://vulkan.lunarg.com/sdk/home
 Clone NCNN repository
 
 ``` shell script
-git clone --recursive https://github.com/Tencent/ncnn.git 
+git clone --recursive https://github.com/Tencent/ncnn.git
 ```
 
 Build NCNN following this tutorial: [Build for Linux / NVIDIA Jetson / Raspberry Pi](https://github.com/Tencent/ncnn/wiki/how-to-build#build-for-linux)
@@ -75,7 +75,7 @@ make
 # Run demo
 
 Download NanoDet ncnn model.
-* [NanoDet ncnn model download link](https://github.com/RangiLyu/nanodet/releases/download/v0.0.1/nanodet_ncnn_model.zip)
+* [NanoDet ncnn model download link](https://github.com/RangiLyu/nanodet/releases/download/v0.3.0/nanodet_m_ncnn_model.zip)
 
 Copy nanodet_m.param and nanodet_m.bin to demo program folder.
 

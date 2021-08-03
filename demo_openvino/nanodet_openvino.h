@@ -18,7 +18,7 @@ typedef struct HeadInfo
     int stride;
 } HeadInfo;
 
-typedef struct BoxInfo 
+typedef struct BoxInfo
 {
     float x1;
     float y1;
@@ -34,16 +34,16 @@ public:
     NanoDet(const char* param);
 
     ~NanoDet();
-    
+
     InferenceEngine::ExecutableNetwork network_;
     InferenceEngine::InferRequest infer_request_;
     // static bool hasGPU;
 
     std::vector<HeadInfo> heads_info_{
         // cls_pred|dis_pred|stride
-            {"792", "795",    8},
-            {"814", "817",   16},
-            {"836", "839",   32},
+        {"cls_pred_stride_8", "dis_pred_stride_8", 8},
+        {"cls_pred_stride_16", "dis_pred_stride_16", 16},
+        {"cls_pred_stride_32", "dis_pred_stride_32", 32},
     };
 
     std::vector<BoxInfo> detect(cv::Mat image, float score_threshold, float nms_threshold);

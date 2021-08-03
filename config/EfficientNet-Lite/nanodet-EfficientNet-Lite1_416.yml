@@ -8,7 +8,7 @@
 save_dir: workspace/efficient1_416_SGD
 model:
   arch:
-    name: GFL
+    name: OneStageDetector
     backbone:
       name: EfficientNetLite
       model_name: efficientnet_lite1
@@ -49,9 +49,9 @@ model:
           loss_weight: 2.0
 data:
   train:
-    name: coco
-    img_path: /home/lingxt/dataset/coco/train2017
-    ann_path: /home/lingxt/dataset/coco/annotations/instances_train2017.json
+    name: CocoDataset
+    img_path: /coco/train2017
+    ann_path: /coco/annotations/instances_train2017.json
     input_size: [416,416] #[w,h]
     keep_ratio: True
     pipeline:
@@ -67,9 +67,9 @@ data:
       saturation: [0.5, 1.2]
       normalize: [[127.0, 127.0, 127.0], [128.0, 128.0, 128.0]]
   val:
-    name: coco
-    img_path: /home/lingxt/dataset/coco/val2017
-    ann_path: /home/lingxt/dataset/coco/annotations/instances_val2017.json
+    name: CocoDataset
+    img_path: /coco/val2017
+    ann_path: /coco/annotations/instances_val2017.json
     input_size: [416,416] #[w,h]
     keep_ratio: True
     pipeline:

@@ -1,25 +1,35 @@
 ![](docs/imgs/Title.jpg)
 
 # NanoDet
+[![CI testing](https://img.shields.io/github/checks-status/RangiLyu/nanodet/main?label=CI&style=flat)](https://img.shields.io/github/checks-status/RangiLyu/nanodet/main?label=CI&style=flat)
+![Codecov](https://img.shields.io/codecov/c/github/RangiLyu/nanodet?color=hotpink)
+[![GitHub license](https://img.shields.io/github/license/RangiLyu/nanodet?color=turquoise&style=flat)](https://github.com/RangiLyu/nanodet/blob/main/LICENSE)
+[![Github downloads](https://img.shields.io/github/downloads/RangiLyu/nanodet/total?color=orange&label=downloads&logo=github&logoColor=lightgrey&style=flat)](https://img.shields.io/github/downloads/RangiLyu/nanodet/total?color=yellow&label=Downloads&logo=github&logoColor=lightgrey&style=flat)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/RangiLyu/nanodet?style=flat)](https://img.shields.io/github/v/release/RangiLyu/nanodet?style=flat)
 
 ### Super fast and lightweight anchor-free object detection model. Real-time on mobile devices.
 
-[![GitHub license](https://img.shields.io/github/license/RangiLyu/nanodet?style=flat-square)](https://github.com/RangiLyu/nanodet/blob/main/LICENSE)
-
-* ⚡Super lightweight: Model file is only 1.8 MB.
+* ⚡Super lightweight: Model file is only 980KB(INT8) or 1.8MB(FP16).
 * ⚡Super fast: 97fps(10.23ms) on mobile ARM CPU.
 * 😎Training friendly:  Much lower GPU memory cost than other models. Batch-size=80 is available on GTX1060 6G.
-* 😎Easy to deploy: Provide **C++ implementation** and **Android demo** based on ncnn inference framework.
+* 😎Easy to deploy: Provide **C++ implementation** with various backends and **Android demo** based on ncnn inference framework.
 
 ****
 ## NEWS!!!
+
+* [2021.05.30] Release ncnn int8 models, and new pre-trained models with ShuffleNetV2-1.5x backbone. Much higher mAP but still realtime(**26.8mAP 21.53ms**).
+
+* [2021.03.12] Apply the **Transformer** encoder to NanoDet! Introducing **NanoDet-t**, which replaces the PAN in NanoDet-m with a **TAN(Transformer Attention Net)**,  gets 21.7 mAP(+1.1) on COCO val 2017. Check [nanodet-t.yml](config/Transformer/nanodet-t.yml) for more details.
+
 * [2021.03.03] Update **Nanodet-m-416** COCO pretrained model. **COCO mAP(0.5:0.95)=23.5**. Download in [Model Zoo](#model-zoo).
 
 * [2021.02.03] Support [EfficientNet-Lite](https://github.com/RangiLyu/EfficientNet-Lite) and [Rep-VGG](https://github.com/DingXiaoH/RepVGG) backbone. Please check the [config folder](config/). Download models in [Model Zoo](#model-zoo)
 
 * [2021.01.10] **NanoDet-g** with lower memory access cost, which designed for edge NPU or GPU, is now available!
-  Check [config/nanodet-g.yml](config/nanodet-g.yml) and download:
-  [COCO pre-trained model(Google Drive)](https://drive.google.com/file/d/10uW7oqZKw231l_tr4C1bJWkbCXgBf7av/view?usp=sharing) | [(BaiduDisk百度网盘)](https://pan.baidu.com/s/1IJLdtLBvmQVOmzzNY_Ci5A) code:otcd
+  Check [config/nanodet-g.yml](config/nanodet-g.yml) and download in [Model Zoo](#model-zoo).
+
+<details>
+<summary>More...</summary>
 
 * [2020.12.19] [MNN python and cpp demos](demo_mnn/) are available.
 
@@ -27,16 +37,22 @@
 
 * [2020.12.01] Great thanks to nihui, now you can try NanoDet running in web browser! 👉 https://nihui.github.io/ncnn-webassembly-nanodet/
 
+</details>
+
 ****
 ## Benchmarks
 
-Model     |Resolution|COCO mAP|Latency(ARM 4xCore)|FLOPS|Params   | Model Size(ncnn fp16)
-:--------:|:--------:|:------:|:-----------------:|:---:|:-------:|:-------:
-NanoDet-m | 320*320 |  20.6 | 10.23ms              | 0.72B      | 0.95M | 1.8MB
-NanoDet-m | 416*416 |  23.5 | 16.44ms              | 1.2B       | 0.95M | 1.8MB
-NanoDet-g | 416*416 |  22.9 | Not Designed For ARM | 4.2B       | 3.81M | 7.7MB
-YoloV3-Tiny| 416*416 | 16.6 | 37.6ms               | 5.62B      | 8.86M | 33.7MB
-YoloV4-Tiny| 416*416 | 21.7 | 32.81ms              | 6.96B      | 6.06M | 23.0MB
+Model          |Resolution|COCO mAP |Latency(ARM 4 Threads) | FLOPS      |   Params  | Model Size
+:-------------:|:--------:|:-------:|:--------------------:|:----------:|:---------:|:-------:
+NanoDet-m      | 320*320 |   20.6   | **10.23ms**          | **0.72G**  | **0.95M** | **1.8MB(FP16)** &#124; **980KB(INT8)**
+NanoDet-m      | 416*416 |   23.5   | 16.44ms              | 1.2G       | **0.95M** | **1.8MB(FP16)** &#124; **980KB(INT8)**
+NanoDet-m-1.5x | 320*320 |   23.5   | 13.53ms              | 1.44G      | 2.08M     |   3.9MB(FP16) &#124; 2MB(INT8)
+NanoDet-m-1.5x | 416*416 | **26.8** | 21.53ms              | 2.42G      | 2.08M     |   3.9MB(FP16) &#124; 2MB(INT8)
+NanoDet-g      | 416*416 |   22.9   | Not Designed For ARM | 4.2G       | 3.81M     |   7.7MB(FP16) &#124; 3.6MB(INT8)
+YoloV3-Tiny    | 416*416 |   16.6   | 37.6ms               | 5.62G      | 8.86M     |   33.7MB
+YoloV4-Tiny    | 416*416 |   21.7   | 32.81ms              | 6.96G      | 6.06M     |   23.0MB
+
+***Find more models in [Model Zoo](#model-zoo)***
 
 Note:
 
@@ -73,6 +89,8 @@ NanoDet is a FCOS-style one-stage anchor-free object detection model which using
 
 Android demo project is in ***demo_android_ncnn*** folder. Please refer to [Android demo guide](demo_android_ncnn/README.md).
 
+Here is a better implementation 👉 [ncnn-android-nanodet](https://github.com/nihui/ncnn-android-nanodet)
+
 ### NCNN C++ demo
 
 C++ demo based on [ncnn](https://github.com/Tencent/ncnn) is in ***demo_ncnn*** folder. Please refer to [Cpp demo guide](demo_ncnn/README.md).
@@ -81,12 +99,19 @@ C++ demo based on [ncnn](https://github.com/Tencent/ncnn) is in ***demo_ncnn*** 
 
 Inference using [Alibaba's MNN framework](https://github.com/alibaba/MNN) is in ***demo_mnn*** folder. Including python and cpp inference code. Please refer to [MNN demo guide](demo_mnn/README.md).
 
+### OpenVINO demo
+
+Inference using [OpenVINO](https://01.org/openvinotoolkit) is in ***demo_openvino*** folder. Please refer to [OpenVINO demo guide](demo_openvino/README.md).
+
+### Web browser demo
+
+https://nihui.github.io/ncnn-webassembly-nanodet/
+
 ### Pytorch demo
 
 First, install requirements and setup NanoDet following installation guide. Then download COCO pretrain weight from here
-👉[COCO pretrain weight for torch>=1.6(Google Drive)](https://drive.google.com/file/d/1EhMqGozKfqEfw8y9ftbi1jhYu86XoW62/view?usp=sharing) | [(百度网盘)](https://pan.baidu.com/s/1LCnmj2Pqhv0tsDX__1j2gg) code:6au1
 
-👉[COCO pretrain weight for torch<=1.5(Google Drive)](https://drive.google.com/file/d/10h-0qLMCgYvWQvKULqbkLvmirFR-w9NN/view?usp=sharing) | [(百度云盘)](https://pan.baidu.com/s/1OTcPiajCcqKLg3Q0vwho3A) code:topw
+👉[COCO pretrain weight (Google Drive)](https://drive.google.com/file/d/1ZkYucuLusJrCb_i63Lid0kYyyLvEiGN3/view?usp=sharing)
 
 * Inference images
 
@@ -106,6 +131,8 @@ python demo/demo.py video --config CONFIG_PATH --model MODEL_PATH --path VIDEO_P
 python demo/demo.py webcam --config CONFIG_PATH --model MODEL_PATH --camid YOUR_CAMERA_ID
 ```
 
+Besides, We provide a notebook [here](./demo/demo-inference-with-pytorch.ipynb) to demonstrate how to make it work with PyTorch.
+
 ****
 
 ## Install
@@ -115,7 +142,7 @@ python demo/demo.py webcam --config CONFIG_PATH --model MODEL_PATH --camid YOUR_
 * Linux or MacOS
 * CUDA >= 10.0
 * Python >= 3.6
-* Pytorch >= 1.3
+* Pytorch >= 1.6
 * experimental support Windows (Notice: Windows not support distributed training before pytorch1.7)
 
 ### Step
@@ -130,13 +157,13 @@ python demo/demo.py webcam --config CONFIG_PATH --model MODEL_PATH --camid YOUR_
 2. Install pytorch
 
 ```shell script
-conda install pytorch torchvision cudatoolkit=11.0 -c pytorch
+conda install pytorch torchvision cudatoolkit=11.1 -c pytorch -c conda-forge
 ```
 
 3. Install requirements
 
 ```shell script
-pip install Cython termcolor numpy tensorboard pycocotools matplotlib pyaml opencv-python tqdm
+pip install Cython termcolor numpy tensorboard pycocotools matplotlib pyaml opencv-python tqdm pytorch-lightning torchmetrics
 ```
 
 4. Setup NanoDet
@@ -155,13 +182,17 @@ NanoDet supports variety of backbones. Go to the [***config*** folder](config/) 
 
 Model                 | Backbone           |Resolution|COCO mAP| FLOPS |Params | Pre-train weight |
 :--------------------:|:------------------:|:--------:|:------:|:-----:|:-----:|:-----:|
-NanoDet-m             | ShuffleNetV2 1.0x  | 320*320  |  20.6  | 0.72B | 0.95M | [Download](https://drive.google.com/file/d/10h-0qLMCgYvWQvKULqbkLvmirFR-w9NN/view?usp=sharing) |
-NanoDet-m-416         | ShuffleNetV2 1.0x  | 416*416  |  23.5  | 1.2B  | 0.95M | [Download](https://drive.google.com/file/d/1h6TBy1tx4faIBKHnYeg0QwzFF6wlFBEd/view?usp=sharing)|
-NanoDet-g             | Custom CSP Net     | 416*416  |  22.9  | 4.2B  | 3.81M | [Download](https://drive.google.com/file/d/10uW7oqZKw231l_tr4C1bJWkbCXgBf7av/view?usp=sharing)|
-NanoDet-EfficientLite | EfficientNet-Lite0 | 320*320  |  24.7  | 1.72B | 3.11M | [Download](https://drive.google.com/file/d/1u_t9L0jqjH858gCR-vpzWzu9FexQOSmJ/view?usp=sharing)|
-NanoDet-EfficientLite | EfficientNet-Lite1 | 416*416  |  30.3  | 4.06B | 4.01M | [Download](https://drive.google.com/file/d/1y9z7BToAZOQ1pKbOjNjf79YMuFuDTvfq/view?usp=sharing) |
-NanoDet-EfficientLite | EfficientNet-Lite2 | 512*512  |  32.6  | 7.12B | 4.71M | [Download](https://drive.google.com/file/d/1UMXJJxRkRzgTvN1iRKeDZqGpkLxK3X4K/view?usp=sharing) |
-NanoDet-RepVGG        | RepVGG-A0          | 416*416  |  27.8  | 11.3B | 6.75M | [Download](https://drive.google.com/file/d/1bsT9Ksxws2O3g_IUuUwp0QwZcJlqJw3S/view?usp=sharing) |
+NanoDet-m             | ShuffleNetV2 1.0x  | 320*320  |  20.6  | 0.72G | 0.95M | [Download](https://drive.google.com/file/d/1ZkYucuLusJrCb_i63Lid0kYyyLvEiGN3/view?usp=sharing) |
+NanoDet-m-416         | ShuffleNetV2 1.0x  | 416*416  |  23.5  |  1.2G | 0.95M | [Download](https://drive.google.com/file/d/1jY-Um2VDDEhuVhluP9lE70rG83eXQYhV/view?usp=sharing)|
+NanoDet-m-1.5x        | ShuffleNetV2 1.5x  | 320*320  |  23.5  | 1.44G | 2.08M | [Download](https://drive.google.com/file/d/1_n1cAWy622LV8wbUnXImtcvcUVPOhYrW/view?usp=sharing) |
+NanoDet-m-1.5x-416    | ShuffleNetV2 1.5x  | 416*416  |  26.8  | 2.42G | 2.08M | [Download](https://drive.google.com/file/d/1CCYgwX3LWfN7hukcomhEhGWN-qcC3Tv4/view?usp=sharing)|
+NanoDet-m-0.5x        | ShuffleNetV2 0.5x  | 320*320  |  13.5  |  0.3G | 0.28M | [Download](https://drive.google.com/file/d/1rMHkD30jacjRpslmQja5jls86xd0YssR/view?usp=sharing) |
+NanoDet-t (***NEW***) | ShuffleNetV2 1.0x  | 320*320  |  21.7  | 0.96G | 1.36M | [Download](https://drive.google.com/file/d/1TqRGZeOKVCb98ehTaE0gJEuND6jxwaqN/view?usp=sharing) |
+NanoDet-g             | Custom CSP Net     | 416*416  |  22.9  |  4.2G | 3.81M | [Download](https://drive.google.com/file/d/1f2lH7Ae1AY04g20zTZY7JS_dKKP37hvE/view?usp=sharing)|
+NanoDet-EfficientLite | EfficientNet-Lite0 | 320*320  |  24.7  | 1.72G | 3.11M | [Download](https://drive.google.com/file/d/1Dj1nBFc78GHDI9Wn8b3X4MTiIV2el8qP/view?usp=sharing)|
+NanoDet-EfficientLite | EfficientNet-Lite1 | 416*416  |  30.3  | 4.06G | 4.01M | [Download](https://drive.google.com/file/d/1ernkb_XhnKMPdCBBtUEdwxIIBF6UVnXq/view?usp=sharing) |
+NanoDet-EfficientLite | EfficientNet-Lite2 | 512*512  |  32.6  | 7.12G | 4.71M | [Download](https://drive.google.com/file/d/11V20AxXe6bTHyw3aMkgsZVzLOB31seoc/view?usp=sharing) |
+NanoDet-RepVGG        | RepVGG-A0          | 416*416  |  27.8  | 11.3G | 6.75M | [Download](https://drive.google.com/file/d/1nWZZ1qXb1HuIXwPSYpEyFHHqX05GaFer/view?usp=sharing) |
 
 
 ****
@@ -182,9 +213,9 @@ NanoDet-RepVGG        | RepVGG-A0          | 416*416  |  27.8  | 11.3B | 6.75M |
 
     Change ***num_classes*** in ***model->arch->head***.
 
-    Change image path and annotation path in both ***data->train   data->val***.
+    Change image path and annotation path in both ***data->train*** and ***data->val***.
 
-    Set gpu, workers and batch size in ***device*** to fit your device.
+    Set gpu ids, num workers and batch size in ***device*** to fit your device.
 
     Set ***total_epochs***, ***lr*** and ***lr_schedule*** according to your dataset and batchsize.
 
@@ -192,17 +223,33 @@ NanoDet-RepVGG        | RepVGG-A0          | 416*416  |  27.8  | 11.3B | 6.75M |
 
 3. **Start training**
 
-    For single GPU, run
+   NanoDet is now using [pytorch lightning](https://github.com/PyTorchLightning/pytorch-lightning) for training.
+
+   For both single-GPU or multiple-GPUs, run:
+
+   ```shell script
+   python tools/train.py CONFIG_FILE_PATH
+   ```
+
+   For **Windows users**, if you have problems with the new lightning trainer, try to use tools/deprecated/train.py
+
+   <details>
+   <summary>follow this...</summary>
+
+   For single GPU, run
 
     ```shell script
-    python tools/train.py CONFIG_PATH
+    python tools/deprecated/train.py CONFIG_FILE_PATH
     ```
 
     For multi-GPU, NanoDet using distributed training. (Notice: Windows not support distributed training before pytorch1.7) Please run
 
     ```shell script
-    python -m torch.distributed.launch --nproc_per_node=GPU_NUM --master_port 29501 tools/train.py CONFIG_PATH
+    python -m torch.distributed.launch --nproc_per_node=GPU_NUM --master_port 29501 tools/deprecated/train.py CONFIG_FILE_PATH
     ```
+
+   </details>
+
 
 4. **Visualize Logs**
 
@@ -212,7 +259,7 @@ NanoDet-RepVGG        | RepVGG-A0          | 416*416  |  27.8  | 11.3B | 6.75M |
 
     ```shell script
     cd <YOUR_SAVE_DIR>
-    tensorboard --logdir ./logs
+    tensorboard --logdir ./
     ```
 
 ****
@@ -225,10 +272,10 @@ NanoDet provide C++ and Android demo based on ncnn library.
 
     To convert NanoDet pytorch model to ncnn, you can choose this way: pytorch->onnx->ncnn
 
-    To export onnx model, run `tools/export.py`.
+    To export onnx model, run `tools/export_onnx.py`.
 
     ```shell script
-    python tools/export.py --cfg_path ${CONFIG_PATH} --model_path ${PYTORCH_MODEL_PATH}
+    python tools/export_onnx.py --cfg_path ${CONFIG_PATH} --model_path ${PYTORCH_MODEL_PATH}
     ```
 
     Then using [onnx-simplifier](https://github.com/daquexian/onnx-simplifier) to simplify onnx structure.
@@ -264,7 +311,3 @@ https://github.com/implus/GFocal
 https://github.com/cmdbug/YOLOv5_NCNN
 
 https://github.com/rbgirshick/yacs
-
-
-
-
