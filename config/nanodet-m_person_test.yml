@@ -2,7 +2,7 @@
 save_dir: workspace/nanodet_m_person_test
 model:
   arch:
-    name: GFL
+    name: OneStageDetector
     backbone:
       name: ShuffleNetV2
       model_size: 1.0x
@@ -57,11 +57,13 @@ data:
       brightness: 0.2
       contrast: [0.8, 1.2]
       saturation: [0.8, 1.2]
+      GasussNoise: 0.1
+#      AverageBlur: 3
       normalize: [[103.53, 116.28, 123.675], [57.375, 57.12, 58.395]]
   val:
     name: coco
-    img_path: /home/lingxt/dataset/ofuroba/images
-    ann_path: /home/lingxt/dataset/ofuroba/annotations/yumoto_2.json
+    img_path: /home/lingxt/dataset/coco/val2017
+    ann_path: /home/lingxt/dataset/coco/annotations/yumoto_test.json
     input_size: [320,320] #[w,h]
     keep_ratio: True
     pipeline:

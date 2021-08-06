@@ -2,7 +2,7 @@
 save_dir: workspace/nanodet_m_person_testcoco
 model:
   arch:
-    name: GFL
+    name: OneStageDetector
     backbone:
       name: ShuffleNetV2
       model_size: 1.0x
@@ -39,7 +39,6 @@ model:
         loss_bbox:
           name: GIoULoss
           loss_weight: 2.0
-class_names: &class_names ['person']
 data:
   train:
     name: coco

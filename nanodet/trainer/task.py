@@ -162,7 +162,8 @@ class TrainingTask(LightningModule):
         results = {}
         for res in validation_step_outputs:
             results.update(res)
-        all_results = gather_results(results) if self.trainer.use_ddp else results
+        # all_results = gather_results(results) if self.trainer.use_ddp else results
+        all_results = gather_results(results)
         if all_results:
             eval_results = self.evaluator.evaluate(
                 all_results, self.cfg.save_dir, rank=self.local_rank
@@ -212,7 +213,8 @@ class TrainingTask(LightningModule):
         results = {}
         for res in test_step_outputs:
             results.update(res)
-        all_results = gather_results(results) if self.trainer.use_ddp else results
+        # all_results = gather_results(results) if self.trainer.use_ddp else results
+        all_results = gather_results(results)
         if all_results:
             res_json = self.evaluator.results2json(all_results)
             json_path = os.path.join(self.cfg.save_dir, "results.json")
